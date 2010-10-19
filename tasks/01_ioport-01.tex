@@ -1,4 +1,3 @@
-\section{I/O-Port}
 
 \subsection{Aufgabe 1}
 
@@ -12,10 +11,10 @@ F"ur die Nutzung des Port4 als Ausgang werden folgende Register ben\"otigt:
 
 Die obere Abbildung zeigt die innere Struktur einer Portleitung.
 
-Alle Leitungen des Port4 werden als Ausgang genutzt. Die LED leuchten, wenn die zugehörige Portleitung den Wert "0" hat. 
+Alle Leitungen des Port4 werden als Ausgang genutzt. Die LED leuchten, wenn die zugeh\"orige Portleitung den Wert ``0'' hat. 
 	
 
-Erläutern Sie die folgenden Befehle und deren Auswirkung in der Reihenfolge ihrer Abarbeitung auf die LED, den Beeper und den Wert der Variablen a (unsigned char).
+Erl\"autern Sie die folgenden Befehle und deren Auswirkung in der Reihenfolge ihrer Abarbeitung auf die LED, den Beeper und den Wert der Variablen a (unsigned char).
 \begin{lstlisting}
      #define LEDRT (0x01)   // Bitmuster 0000 0001 fuer die Steuerung der Roten LED (also auf Portleitung 0 eines Ports) 
      P4DIR = 0x00;          // Der gesamte Port wird auf Eingang umgestellt, Konsequenz P4IN wird durch LEDs 0000 0111
