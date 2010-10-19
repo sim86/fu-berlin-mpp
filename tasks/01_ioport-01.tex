@@ -1,5 +1,6 @@
-
 \subsection{Aufgabe 1}
+
+\subsubsection*{Ausgangpunkt}
 
 F"ur die Nutzung des Port4 als Ausgang werden folgende Register ben\"otigt:
 \begin{itemize}
@@ -11,38 +12,61 @@ F"ur die Nutzung des Port4 als Ausgang werden folgende Register ben\"otigt:
 
 Die obere Abbildung zeigt die innere Struktur einer Portleitung.
 
-Alle Leitungen des Port4 werden als Ausgang genutzt. Die LED leuchten, wenn die zugeh\"orige Portleitung den Wert ``0'' hat. 
-	
-
-Erl\"autern Sie die folgenden Befehle und deren Auswirkung in der Reihenfolge ihrer Abarbeitung auf die LED, den Beeper und den Wert der Variablen a (unsigned char).
-\begin{lstlisting}
-     #define LEDRT (0x01)   // Bitmuster 0000 0001 fuer die Steuerung der Roten LED (also auf Portleitung 0 eines Ports) 
-     P4DIR = 0x00;          // Der gesamte Port wird auf Eingang umgestellt, Konsequenz P4IN wird durch LEDs 0000 0111
-     a = 10;                // lokale Variable bekommt den wert 10 = 0000 1010
-     P4OUT = a;             // Ausgabewert der Portleitung 1 und 3 (Gelb und Beeper) werden auf 1 gesetzt ausgestellt, allerdings ist die Richtung noch auf Eingang gestellt
-     P4OUT = 0x01;          // Register wird wieder \"uberschrieben, nur Rot wird ausgestellt 
-     P4DIR = 0x07;          // Alle Portleitungen f\"ur die LEDs werden auf Ausgang umgestellt
-     a = P4IN & 0x07;       // 
-     P4OUT &= 0x00;
-     P4OUT |= 0x01;
-     P4OUT |= LEDRT;
-     P4OUT &= ~LEDRT;
-     P3OUT ^= LEDRT;
-\end{lstlisting}
-
 Folgende Belegungen der Portleitungen auf Basis der Schaltung werden vorausgesetzt:
 \begin{itemize}
     \item P4.0 LED rot
     \item P4.1 LED gelb
-    \item P4.2 LED grün
+    \item P4.2 LED gr\"un
     \item P4.3 Beeper
 \end{itemize}
+Alle Leitungen des Port4 werden als Ausgang genutzt. Die LED leuchten, wenn die zugeh\"orige Portleitung den Wert ``0'' hat. 
+	
+\subsubsection*{Betrachtung von Beispiel-Code}
+Erl\"autern Sie die folgenden Befehle und deren Auswirkung in der Reihenfolge ihrer Abarbeitung auf die LED, den Beeper und den Wert der Variablen a (unsigned char).
+\begin{lstlisting}[caption=Auszuf\"uhrender Beispiel-Code,%
+                   label=lst_ioport_1-1]
+#define LEDRT (0x01)   // Bitmuster 0000 0001 fuer die Steuerung der Roten LED (also auf Portleitung 0 eines Ports) 
+P4DIR = 0x00;          // Der gesamte Port wird auf Eingang umgestellt, Konsequenz P4IN wird durch LEDs 0000 0111
+a = 10;                // lokale Variable bekommt den wert 10 = 0000 1010
+P4OUT = a;             // Ausgabewert der Portleitung 1 und 3 (Gelb und Beeper) werden auf 1 gesetzt ausgestellt, allerdings ist die Richtung noch auf Eingang gestellt
+P4OUT = 0x01;          // Register wird wieder \"uberschrieben, nur Rot wird ausgestellt 
+P4DIR = 0x07;          // Alle Portleitungen f\"ur die LEDs werden auf Ausgang umgestellt
+a = P4IN & 0x07;       // 
+P4OUT &= 0x00;
+P4OUT |= 0x01;
+P4OUT |= LEDRT;
+P4OUT &= ~LEDRT;
+P3OUT ^= LEDRT;
+\end{lstlisting}
 
 
+\subsubsection*{Pogrammierung einer Ampelsequenz}
 
 Schreiben Sie ein kleines Programm, welches den Durchlauf einer Ampelsignalsequenz mit den Phasen (rt,rt-gb,gr,gb,rt) simuliert. Nutzen Sie dazu die bereitgestellte Funktion für eine Zeitschleife.  
 
+\begin{lstlisting}[caption=Einfache Ampelsequenz,%
+                   label=lst_ioport_1-2]
+void aufgabe1(){
+	#define LEDRT (0x01)
+	#define LEDGB (0x02)
+	#define LEDGR (0x04)
+	int wartezeit=100000;
+	
+	P4DIR = 0x07;
+	P4OUT = 0xFF;
 
+	P4OUT &= ~LEDRT; //rot
+	wait(wartezeit);
+	P4OUT &= ~LEDGB; //gelb-rot
+	wait(wartezeit);	
+	P4OUT = ~LEDGR;  //gr\"un
+	wait(wartezeit);
+	P4OUT = ~LEDGB;  //gelb
+	wait(wartezeit);
+	P4OUT = ~LEDRT;  //rot
+	wait(wartezeit);
+}
+\end{lstlisting}
 
 % \subsubsection{Aufgabenstellung}
 
